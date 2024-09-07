@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="view_order_product_search" model="ir.ui.view">
+        <field name="inherit_id" ref="sale.view_order_product_search" />
+        <field name="model">sale.report</field>
+        <field name="arch" type="xml">
+            <filter name="User" position="before">
+                <filter
+                    string="Discount Type 1"
+                    name="type_1"
+                    context="{'group_by':'type_1'}"
+                />
+                <filter
+                    string="Discount Type 2"
+                    name="type_2"
+                    context="{'group_by':'type_2'}"
+                />
+            </filter>
+        </field>
+    </record>
+
+    <template id="report_saleorder_document" inherit_id="sale.report_saleorder_document">
+        <xpath expr="/t/t/div/h2" position="attributes">
+            <attribute name="class" separator=" " add="text-center"/>
+            <attribute name="style" separator=";" add="margin-top:-58px"/>
+        </xpath>
+        <xpath expr="/t[1]/t[1]/div[1]/div[2]/div[1]" position="before">
+            <div class="col-auto col-3 mw-100 mb-2" name="partner">
+                <strong>Customer:</strong>
+                <p class="m-0" t-field="doc.partner_id"/>
+            </div>
+        </xpath>
+
+    </template>
+    <template id="address_layout" inherit_id="web.address_layout">
+        <xpath expr="/t[1]/t[2]/div[1]/t[1]/div[1]" position="replace"/>
+        <xpath expr="/t[1]/t[2]/div[1]" position="replace"/>
+    </template>
+
+</odoo>

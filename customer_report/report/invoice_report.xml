@@ -1,0 +1,96 @@
+<data>
+    <!-- Action -->
+<!--    <record id="report_invoice_custom" model="ir.actions.report">-->
+<!--        <field name="name">Invoice Report</field>-->
+<!--        <field name="model">invoice.report.wizard</field>-->
+<!--        <field name="report_type">qweb-pdf</field>-->
+<!--        <field name="report_name">invoice_account.report_invoice_template</field>-->
+<!--        <field name="report_file">invoice_account.report_invoice_template</field>-->
+<!--        <field name="binding_model_id" ref="model_invoice_report_wizard"/>-->
+<!--        <field name="binding_type">report</field>-->
+<!--    </record>-->
+
+    <report
+            id="report_invoice_custom"
+            model="invoice.report.wizard"
+            report_type="qweb-pdf"
+            string="Partner Report"
+            name="customer_report.report_invoice_template"
+            file="customer_report.report_invoice_template"
+    />
+
+
+    <!-- QWeb Template -->
+    <template id="report_invoice_template" t-name="customer_report.report_invoice_template">
+<!--        <t t-foreach="docs" t-as="o">-->
+            <t t-call="web.html_container">
+                <t t-call="web.external_layout">
+                        <!-- Table 1 -->
+                        <table class="table table-bordered" style="table-layout: fixed;border: 1pt solid black;" id="hash_config_table">
+                            <thead>
+                                <tr>
+                                    <th>Customer Name</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="text-center">
+                                        <t t-esc="partner_id"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <t t-esc="due_from"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <t t-esc="due_to"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    <br/>
+                    <br/>
+                    <div class="row">
+                        <div class="col-12">
+                            <table class="table table-bordered" style="table-layout: fixed;border: 1pt solid black;width:100%;" id="hash_config_table">
+                                <thead>
+                                    <tr>
+                                        <th style="width:15%">Date</th>
+                                        <th style="width:20%">Invoice No</th>
+                                        <th style="width:35%">Ref</th>
+<!--                                        <th>Duration</th>-->
+                                        <th style="width:10%;font_size:6px">Debit</th>
+                                        <th style="width:10%;font_size:6px">Credit</th>
+                                        <th style="width:10%;font_size:6px">Balance</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Check if move_lines exists before iterating -->
+                                    <t t-if="data">
+                                        <t t-foreach="data" t-as="d">
+                                            <tr >
+                                                <td class="text-center" style="width:15%"><t t-esc="d[0]"/></td>
+                                                <td class="text-center" style="width:20%"><t t-esc="d[1]"/></td>
+                                                <td class="text-center" style="width:35%"><t t-esc="d[2]"/></td>
+<!--                                                <td class="text-center"><t t-esc="d[3]"/></td>-->
+                                                <td class="text-center" style="width:10%;font-size:12px"><t t-esc="d[4]" t-options='{"widget": "float", "precision": 2}'/></td>
+                                                <td class="text-center" style="width:10%;font-size:12px"><t t-esc="d[5]" t-options='{"widget": "float", "precision": 2}'/></td>
+                                                <td class="text-center" style="width:10%;font-size:12px"><t t-esc="d[6]" t-options='{"widget": "float", "precision": 2}'/></td>
+                                            </tr>
+                                        </t>
+                                    </t>
+                                    <!-- If move_lines is not present, you can add a default row or message -->
+                                    <t t-else="">
+                                        <tr>
+                                            <td colspan="7">No move lines available</td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </t>
+            </t>
+<!--        </t>-->
+    </template>
+</data>

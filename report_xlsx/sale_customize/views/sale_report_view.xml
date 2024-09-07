@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="view_order_product_search" model="ir.ui.view">
+        <field name="inherit_id" ref="sale.view_order_product_search" />
+        <field name="model">sale.report</field>
+        <field name="arch" type="xml">
+            <filter name="User" position="before">
+                <filter
+                    string="Discount Type 1"
+                    name="type_1"
+                    context="{'group_by':'type_1'}"
+                />
+                <filter
+                    string="Discount Type 2"
+                    name="type_2"
+                    context="{'group_by':'type_2'}"
+                />
+            </filter>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,58 @@
+<data>
+    <record id="inherit_mrp_production_form" model="ir.ui.view">
+        <field name="name">inherit.mrp.production.form</field>
+        <field name="model">mrp.production</field>
+        <!--<field name="groups_id" eval="[(4, ref(''))]"/>-->
+        <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='move_raw_ids']//tree//field[@name='should_consume_qty']" position="after">
+                <field name="percent"/>
+            </xpath>
+            <xpath expr="//field[@name='move_raw_ids']//tree//field[@name='quantity_done']" position="attributes">
+                <attribute name="attrs">{'readonly': [('has_tracking', '!=','none')]}</attribute>
+            </xpath>
+            <xpath expr="//div[@name='bom_div']" position="after">
+                <field name="tank_id"/>
+                <field name="tank_weight"/>
+                <field name="unit_volume"/>
+                <field name="no_of_products_on_unit"/>
+            </xpath>
+            <xpath expr="//header" position="inside">
+                <button name="set_consumed_qty" string="Set Consumed Qty" type="object" states="draft,confirmed,progress" class="oe_highlight"/>
+            </xpath>
+            <xpath expr="//div[@class='o_row'][2]" position="attributes">
+                <attribute name="attrs">{'invisible': [('product_tracking', 'in', ('none', False))]}</attribute>
+            </xpath>
+
+            <xpath expr="//label[@for='lot_producing_id']" position="attributes">
+                <attribute name="attrs">{'invisible': [('product_tracking', 'in', ('none', False))]}</attribute>
+            </xpath>
+
+        </field>
+    </record>
+
+    <record id="tank_tank_tree" model="ir.ui.view">
+        <field name="name">tank.tank.tree</field>
+        <field name="model">tank.tank</field>
+        <!--<field name="field_parent">children_ids if_want_to_add_Childs</field>-->
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="name"/>
+                <field name="weight"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="tank_tank_action" model="ir.actions.act_window">
+        <field name="name">Tank</field>
+        <field name="res_model">tank.tank</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="tank_tank_menu"
+              name="Tank"
+              action="tank_tank_action"
+              parent="mrp.menu_mrp_configuration"
+              sequence="10"
+              />
+</data>

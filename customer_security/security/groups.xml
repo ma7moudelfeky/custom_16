@@ -1,0 +1,39 @@
+<odoo>
+    <data>
+
+        <record id="module_see_own_customer" model="ir.module.category">
+            <field name="name">Customers</field>
+            <field name="description">See Own Customers</field>
+            <field name="sequence">45</field>
+        </record>
+
+<!--        <record id="module_see_own_invoices" model="ir.module.category">-->
+<!--            <field name="name">Invoices</field>-->
+<!--            <field name="description">See Own Customers Invoices</field>-->
+<!--            <field name="sequence">46</field>-->
+<!--        </record>-->
+
+        <record id="group_customers_user" model="res.groups">
+            <field name="name">User</field>
+            <field name="category_id" ref="module_see_own_customer"/>
+        </record>
+
+        <record id="group_customers_admin" model="res.groups">
+            <field name="name">Admin</field>
+            <field name="category_id" ref="module_see_own_customer"/>
+            <field name="implied_ids" eval="[(4, ref('group_customers_user'))]"/>
+        </record>
+
+<!--        <record id="group_invoices_user" model="res.groups">-->
+<!--            <field name="name">User</field>-->
+<!--            <field name="category_id" ref="module_see_own_invoices"/>-->
+<!--        </record>-->
+
+<!--        <record id="group_invoices_admin" model="res.groups">-->
+<!--            <field name="name">Admin</field>-->
+<!--            <field name="category_id" ref="module_see_own_invoices"/>-->
+<!--            <field name="implied_ids" eval="[(4, ref('group_invoices_user'))]"/>-->
+<!--        </record>-->
+
+    </data>
+</odoo>

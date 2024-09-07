@@ -1,0 +1,18 @@
+<odoo>
+    <data>
+        <record id="user_can_see_own_customer_rule" model="ir.rule">
+            <field name="name">res.partner.user.customers</field>
+            <field name="model_id" ref="account.model_res_partner"/>
+            <field name="domain_force">['|', ('allowed_user_ids', '=', user.id), ('allowed_user_ids', '=', False)]
+            </field>
+            <field name="groups" eval="[(4, ref('customer_security.group_customers_user'))]"/>
+        </record>
+
+        <record id="admin_can_see_own_customer_rule" model="ir.rule">
+            <field name="name">res.partner.admin.customers</field>
+            <field name="model_id" ref="account.model_res_partner"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('customer_security.group_customers_admin'))]"/>
+        </record>
+    </data>
+</odoo>

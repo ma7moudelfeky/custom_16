@@ -1,0 +1,33 @@
+<data>
+
+    <record id="action_invoice_report_wizard_pdf" model="ir.actions.act_window">
+        <field name="name">Partner Report</field>
+        <field name="res_model">invoice.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="view_invoice_report_wizard_form" model="ir.ui.view">
+        <field name="name">invoice.report.wizard.form</field>
+        <field name="model">invoice.report.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="due_from" required="1"/>
+                    <field name="due_to" required="1"/>
+                    <field name="partner_id"/>
+                </group>
+                <footer>
+                    <button string="Generate Report XLSX" type="object" class="oe_highlight" name="generate_report_xlsx"/>
+                    <button string="Generate Report PDF" type="object" class="oe_highlight" name="generate_report_pdf"/>
+                    <button string="Cancel" class="oe_link" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <menuitem id="menu_invoice_report"
+              name="Partner Report"
+              action="action_invoice_report_wizard_pdf"
+              sequence="10"/>
+</data>

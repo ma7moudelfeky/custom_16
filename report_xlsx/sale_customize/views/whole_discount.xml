@@ -1,0 +1,95 @@
+<data>
+    <record id="whole_discount_form" model="ir.ui.view">
+        <field name="name">whole.discount.form</field>
+        <field name="model">whole.discount</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="get_invoices" string="Get Invoices" type="object" class="oe_highlight" states="draft"/>
+                    <button name="create_credit_note" string="Create Credit Note" type="object" class="oe_highlight" states="draft"/>
+                    <field name="state" widget="statusbar" />
+                </header>
+                <sheet>
+                    <div name="button_box" class="oe_button_box">
+
+                        <button type="object"
+                                name="action_view_credit_note"
+                                attrs="{'invisible':[('state','=','draft')]}"
+                                class="oe_stat_button"
+                                icon="fa-pencil-square-o">
+                            Credit Note
+                        </button>
+
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="partner_id"/>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                            <field name="type"/>
+                            <field name="journal_id"/>
+                        </group>
+                        <group>
+                            <field name="type_1"/>
+                            <field name="type_2"/>
+                            <field name="first_whole_discount_percentage"/>
+                            <field name="second_whole_discount_percentage"/>
+                            <field name="first_whole_discount_amount"/>
+                            <field name="second_whole_discount_amount"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="whole_discount_line_ids" string="Whole Discount Line Ids">
+                            <!-- add  context="{'default_field' : field}" to set default value -->
+                            <field name="whole_discount_line_ids">
+                                <tree>
+                                    <!-- add  domain="[('id','=',parent.field)]" to set default domain -->
+                                    <field name="invoice_id"/>
+                                    <field name="first_use"/>
+                                    <field name="first_discount_amount"/>
+                                    <field name="second_use"/>
+                                    <field name="second_discount_amount"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="whole_discount_tree" model="ir.ui.view">
+        <field name="name">whole.discount.tree</field>
+        <field name="model">whole.discount</field>
+        <!--<field name="field_parent">children_ids if_want_to_add_Childs</field>-->
+        <field name="arch" type="xml">
+            <tree>
+                <field name="partner_id"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="type"/>
+                <field name="type_1"/>
+                <field name="type_2"/>
+                <field name="first_whole_discount_percentage"/>
+                <field name="second_whole_discount_percentage"/>
+                <field name="first_whole_discount_amount"/>
+                <field name="second_whole_discount_amount"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="whole_discount_action" model="ir.actions.act_window">
+        <field name="name">Whole Discount</field>
+        <field name="res_model">whole.discount</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="Whole_Discount_menu"
+              name="Whole Discount"
+              action="whole_discount_action"
+              sequence="80"/>
+</data>

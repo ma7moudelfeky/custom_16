@@ -1,0 +1,73 @@
+
+<data>
+            <!-- Define the QWeb report template for the Invoice PDF Report -->
+    <data>
+        <report id="invoice_report_wizard_report"
+                model="invoice.report.wizard"
+                string="Customer Report Wizard"
+                report_type="qweb-pdf"
+                name="invoice_report_wizard.report_invoice_template"
+                file="invoice_report_wizard.report_invoice_template"
+                attachment_use="True"
+                attachment="(object.name or '')+' '+ time.strftime('%d,%b %Y %I:%M %p')"
+        />
+
+
+<!--        &lt;!&ndash; Define the external ID for the ir.actions.report record &ndash;&gt;-->
+<!--        <record id="report_invoice_pdf" model="ir.actions.report">-->
+<!--            <field name="name">Invoice Report PDF</field>-->
+<!--            <field name="model">invoice.report.wizard</field>-->
+<!--            <field name="report_type">qweb-pdf</field>-->
+<!--            <field name="report_name">invoice_report_wizard.report_invoice_template</field>-->
+<!--        </record>-->
+<!--        &lt;!&ndash; Define the QWeb report template content &ndash;&gt;-->
+<!--        -->
+<!--        -->
+        <template id="report_invoice_template">
+
+            <t t-call="web.html_container">
+                <t t-call="web.external_layout">
+                    <t t-foreach="doc.move_lines" t-as="line">
+                                <!-- Customize your report template here using the move_lines data -->
+                                <div>
+                                    <span t-esc="line.move_id.name"/><br/>
+                                    <span t-esc="line.due_date"/><br/>
+                                    <span t-esc="line.amount_currency"/><br/>
+                                    <span t-esc="line.partner_id.name"/>
+                                </div>
+                            </t>
+                </t>
+            </t>
+        </template>
+    </data>
+
+
+
+
+
+<!--</template>-->
+
+<!--        &lt;!&ndash; Define the external ID for the ir.actions.report record &ndash;&gt;-->
+<!--        <record id="invoice_report_wizard_report_invoice_pdf" model="ir.actions.report">-->
+<!--            <field name="name">Invoice Report PDF</field>-->
+<!--            <field name="model">invoice.report.wizard</field>-->
+<!--            <field name="report_type">qweb-pdf</field>-->
+<!--            <field name="report_name">invoice_report_wizard.report_invoice_template</field>-->
+<!--        </record>-->
+
+<!--        &lt;!&ndash; Define the QWeb report template content &ndash;&gt;-->
+<!--        <template id="invoice_report_wizard.report_invoice_template">-->
+<!--            <t t-call="web.html_container">-->
+<!--                <t t-foreach="doc.move_lines" t-as="line">-->
+<!--                    &lt;!&ndash; Customize your report template here using the move_lines data &ndash;&gt;-->
+<!--                    <div>-->
+<!--                        <span t-esc="line.move_id.name"/><br/>-->
+<!--                        <span t-esc="line.due_date"/><br/>-->
+<!--                        <span t-esc="line.amount_currency"/><br/>-->
+<!--                        <span t-esc="line.partner_id.name"/>-->
+<!--                    </div>-->
+<!--                </t>-->
+<!--            </t>-->
+<!--        </template>-->
+<!--    </data>-->
+        </data>

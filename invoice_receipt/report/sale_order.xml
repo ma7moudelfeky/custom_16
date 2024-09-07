@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="receipt_pos">
+        <t t-call="web.html_container">
+        <t t-call="web.basic_layout">
+            <t t-foreach="docs" t-as="o">
+                <div class="page" style="padding-top:8px">
+                    <div style="font-family:'Lato','Lucida Grande', Helvetica, Verdana, Arial;">
+                        <div style="font-size:75%;text-align:center;">
+                            <t t-esc="o.company_id.name" /><br />
+                            <t t-if="o.company_id.phone">
+                                Tel.: <t t-esc="o.company_id.phone" /><br />
+                            </t>
+                            <t t-if="o.company_id.vat">
+                                Vat: <t t-esc="o.company_id.vat" /><br />
+                            </t>
+                            <t t-if="o.company_id.email">
+                                <t t-esc="o.company_id.email" /><br />
+                            </t>
+                            <t t-if="o.company_id.website">
+                                <t t-esc="o.company_id.website" /><br />
+                            </t>
+                            --------------------------------<br />
+
+                            <div t-if="o.partner_id">
+                                Customer: <t t-esc="o.partner_id.name" /><br/>
+                                <t t-if="o.partner_id.vat">
+                                    Vat: <t t-esc="o.partner_id.vat" /><br/>
+                                </t>
+                                <t t-if="o.partner_id.street">
+                                    Street: <t t-esc="o.partner_id.street" /><br/>
+                                </t>
+                                <t t-if="o.partner_id.phone">
+                                    Phone: <t t-esc="o.partner_id.phone" /><br/>
+                                </t>
+                                <t t-if="o.partner_id.email">
+                                    Email: <t t-esc="o.partner_id.email" /><br/>
+                                </t>
+                            </div>
+                            --------------------------------<br />
+                            Sale Person <t t-esc="o.sales_rep_id.name" /><br />
+                            Sale Cashier <t t-esc="o.user_id.name" /><br />
+                        </div>
+                        <br /><br />
+                        <table class="table table-bordered"  style="width:100%;">
+                            <tr>
+                                <td>Item</td>
+                                <td>Quantity</td>
+                                <td>Price</td>
+                                <td>Total</td>
+                            </tr>
+                            <t t-foreach="o.invoice_line_ids" t-as="line">
+                                <tr>
+                                    <td><t t-esc="line.product_id.name" /></td>
+                                    <td><t t-esc="line.quantity" /></td>
+                                    <td><t t-esc="line.price_unit" /></td>
+                                    <td><t t-esc="line.price_subtotal" /></td>
+                                </tr>
+                            </t>
+                        </table>
+                        <br />
+                        <table t-if="o.amount_tax != 0" style="width:100%;">
+<!--                            <tr>-->
+<!--                                <td colspan="2" style="text-align:right;">-->
+<!--                                    &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-->
+<!--                                </td>-->
+<!--                            </tr>-->
+                            <tr>
+                                <td style="width:50%;">
+                                    <span>Subtotal</span>
+                                </td>
+                                <td style="width:50%;text-align:right;">
+                                    <span><t t-esc="o.amount_untaxed" t-options='{"widget": "monetary", "display_currency": o.currency_id}' /></span>
+                                </td>
+                            </tr>
+                        </table>
+                        <table style="width:100%;">
+<!--                            <tr>-->
+<!--                                <td colspan="2" style="text-align:right;">-->
+<!--                                    &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-->
+<!--                                </td>-->
+<!--                            </tr>-->
+                            <tr style="font-size:125%;text-align:right;">
+                                <td style="width:50%;">
+                                    <span>TOTAL</span>
+                                </td>
+                                <td style="width:50%;text-align:right;">
+                                    <span><t t-esc="o.amount_total" t-options='{"widget": "monetary", "display_currency": o.currency_id}' /></span>
+                                </td>
+                            </tr>
+                        </table>
+
+                    </div>
+                </div>
+            </t>
+        </t>
+        </t>
+    </template>
+
+</odoo>

@@ -1,0 +1,124 @@
+<odoo>
+    <data>
+
+        <record id="add_commission_to_partner" model="ir.ui.view">
+            <field name="name">add_commission_to_partner</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='internal_notes']" position="after">
+                    <page string="Commission Info">
+                        <group>
+                            <field name="commission_ratio" widget="percentage"/>
+                            <field name="based_on"/>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="add_commission_to_payment_form" model="ir.ui.view">
+            <field name="name">add_commission_to_payment_form</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account.view_account_payment_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='partner_bank_id']" position="after">
+                    <field name="commission" attrs="{'invisible' : ['|', '|', ('commission', '=', False), ('state', '=', 'draft'), ('commission_type', '!=', 'payment')]}"/>
+                    <field name="commission_type" invisible="1"/>
+                    <field name="partner_type" invisible="1"/>
+                </xpath>
+                <xpath expr="//field[@name='ref']" position="after">
+
+                    <div style="margin-top:20px;" attrs="{'invisible' : ['|', '|', ('commission', '=', False), ('state', '=', 'draft'), ('commission_type', '!=', 'payment')]}">
+                        <h2>Sales Person</h2>
+                    </div>
+                    <br/>
+
+                    <field name="user_id"
+                           attrs="{'invisible' : ['|', '|', ('commission', '=', False), ('state', '=', 'draft'), ('commission_type', '!=', 'payment')]}"/>
+                    <field name="user_id_commission"
+                           attrs="{'invisible' : ['|', '|', ('commission', '=', False), ('state', '=', 'draft'), ('commission_type', '!=', 'payment')]}"
+                           widget="percentage"/>
+                    <field name="user_id_based_on"
+                           attrs="{'invisible' : ['|', '|', ('commission', '=', False), ('state', '=', 'draft'), ('commission_type', '!=', 'payment')]}"/>
+                    <field name="user_id_commission_value"
+                           attrs="{'invisible' : ['|', '|', ('commission', '=', False), ('state', '=', 'draft'), ('commission_type', '!=', 'payment')]}"/>
+                    <field name="user_id_net" widget='monetary'
+                           attrs="{'invisible' : ['|', '|', ('commission', '=', False), ('state', '=', 'draft'), ('commission_type', '!=', 'payment')]}"/>
+
+                    <div style="margin-top:20px;" attrs="{'invisible' : ['|', '|', ('commission', '=', False), ('state', '=', 'draft'), ('commission_type', '!=', 'payment')]}">
+                        <h2>Sales Team</h2>
+                    </div>
+                    <br/>
+
+                    <field name="team_id"
+                           attrs="{'invisible' : ['|', '|', ('commission', '=', False), ('state', '=', 'draft'), ('commission_type', '!=', 'payment')]}"/>
+                    <field name="team_id_commission"
+                           attrs="{'invisible' : ['|', '|', ('commission', '=', False), ('state', '=', 'draft'), ('commission_type', '!=', 'payment')]}" widget="percentage"/>
+                    <field name="team_id_based_on"
+                           attrs="{'invisible' : ['|', '|', ('commission', '=', False), ('state', '=', 'draft'), ('commission_type', '!=', 'payment')]}"/>
+                    <field name="team_id_commission_value"
+                           attrs="{'invisible' : ['|', '|', ('commission', '=', False), ('state', '=', 'draft'), ('commission_type', '!=', 'payment')]}"/>
+                    <field name="team_id_net" widget='monetary'
+                           attrs="{'invisible' : ['|', '|', ('commission', '=', False), ('state', '=', 'draft'), ('commission_type', '!=', 'payment')]}"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="add_commission_to_payment_tree" model="ir.ui.view">
+            <field name="name">add_commission_to_payment_tree</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account.view_account_payment_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='partner_id']" position="after">
+                    <field name="commission" optional="hide"/>
+                    <field name="user_id" optional="hide"/>
+                    <field name="user_id_commission" optional="hide" widget="percentage"/>
+                    <field name="user_id_based_on" optional="hide"/>
+                    <field name="user_id_net" optional="hide"/>
+                    <field name="user_id_commission" optional="hide"/>
+                    <field name="team_id" optional="hide"/>
+                    <field name="team_id_commission" optional="hide" widget="percentage"/>
+                    <field name="team_id_based_on" optional="hide"/>
+                    <field name="team_id_net" optional="hide"/>
+                    <field name="team_id_commission_value" optional="hide"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="add_groupby_sales_person_sales_team" model="ir.ui.view">
+            <field name="name">add_groupby_sales_person_sales_team</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account.view_account_payment_search"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='company']" position="after">
+                    <filter string="Sales Person" name="sales_person" domain="[]" context="{'group_by': 'user_id'}"/>
+                    <filter string="Sales Team" name="sales_team" domain="[]" context="{'group_by': 'team_id'}"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="add_commission_type_to_settings" model="ir.ui.view">
+            <field name="name">add_commission_type_to_settings</field>
+            <field name="model">res.config.settings</field>
+            <field name="inherit_id" ref="account.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@id='pay_invoice_online_setting_container']" position="after">
+                    <h2>Commissions</h2>
+                    <div class="row mt16 o_settings_container" name="commission_type">
+                        <div id="id_commission_type" class="col-12 col-lg-6 o_setting_box" title="Commission Types!.">
+                            <div class="o_setting_right_pane">
+                                <label for="commission_type"/>
+                                <div class="content-group">
+                                    <div class="mt16">
+                                        <field name="commission_type" class="o_light_label" widget="radio"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

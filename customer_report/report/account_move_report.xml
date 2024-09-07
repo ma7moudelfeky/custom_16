@@ -1,0 +1,105 @@
+<data>
+    <record id="report_invoice_custom" model="ir.actions.report">
+        <field name="name">Invoice Report</field>
+        <field name="model">account.move</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">customer_report.report_invoice</field>
+        <field name="report_file">customer_report.report_invoice</field>
+        <field name="binding_model_id" ref="account.model_account_move"/>
+        <field name="binding_type">report</field>
+    </record>
+
+
+    <template id="report_invoice">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <t t-foreach="docs" t-as="o">
+                    <div class="page">
+
+                        <!-- Main Content -->
+                        <div class="row">
+                            <div class="col-6">
+                                <h4>Customer: <span t-field="o.partner_id.name"/></h4>
+                                <address class="mb-0" t-field="o.partner_id" t-options='{"widget": "contact", "fields": ["address"], "no_marker": False}'/>
+                                <p>Invoice Date: <span t-field="o.invoice_date"/></p>
+                                <p>Due Date: <span t-field="o.invoice_date_due"/></p>
+                                <!-- ... Other customer information ... -->
+                            </div>
+                            <div class="col-6">
+                                <p>Salesperson: <span t-field="o.invoice_user_id.name"/></p>
+                                <p>Sales Team: <span t-field="o.team_id.name"/></p>
+                                <p>Payment Terms: <span t-field="o.invoice_payment_term_id.name"/></p>
+                                <p>Currency: <span t-field="o.currency_id.name"/></p>
+                                <p>Created By: <span t-field="o.create_uid.name"/></p>
+                                <!-- ... Other sales information ... -->
+                            </div>
+                        </div>
+                        <br/>
+                        <br/>
+                        <!-- Table with Untaxed Amount, Taxes, Total, and Amount Due -->
+                        <div class="row">
+                            <div class="col-12">
+                                <table class="table table-bordered" style="table-layout: fixed;border: 1pt solid black;" id="hash_config_table">
+                                    <thead style="display: table-row-group">
+                                        <tr>
+                                            <th class="text-center" style="width: 20%" scope="col">Product</th>
+<!--                                            <th class="text-center" style="width: 20%" scope="col">Label</th>-->
+<!--                                            <th class="text-center" style="width: 20%" scope="col">Account</th>-->
+                                            <th class="text-center" style="width: 10%" scope="col">Quantity</th>
+                                            <th class="text-center" style="width: 10%" scope="col">Price</th>
+                                            <th class="text-center" style="width: 10%" scope="col">Taxes</th>
+                                            <th class="text-center" style="width: 10%" scope="col">Subtotal</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr t-foreach="o.invoice_line_ids" t-as="line">
+                                            <td><span t-esc="line.product_id.name"/></td>
+<!--                                            <td><span t-esc="line.name"/></td>-->
+<!--                                            <td><span t-esc="line.account_id.name"/></td>-->
+                                            <td><span t-field="line.quantity"/></td>
+                                            <td><span t-field="line.price_unit"/></td>
+                                            <td>
+                                                <span t-foreach="line.tax_ids" t-as="tax">
+                                                    <!-- Display tax information here -->
+                                                    <span t-esc="tax.name"/><br/>
+                                                </span>
+                                            </td>
+                                            <td><span t-field="line.price_subtotal"/></td>
+                                        </tr>
+                                    </tbody>
+                                    <!-- Additional row for Untaxed Amount, Taxes, Total, and Amount Due -->
+                                    <tfoot>
+                                        <!-- ... Footer rows ... -->
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                        <br/>
+                        <br/>
+
+                        <div class="clearfix mb-4">
+                            <div id="total" class="row">
+                                <div t-attf-class="#{'col-6' if report_type != 'html' else 'col-sm-7 col-md-6'} ms-auto">
+                                    <table class="table table-sm table-borderless" style="page-break-inside: avoid;">
+
+                                        <!--Tax totals-->
+                                        <t t-set="tax_totals" t-value="o.tax_totals"/>
+                                        <t t-call="account.document_tax_totals"/>
+
+                                        <!--Payments-->
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+
+<!--    <menuitem id="menu_item_report_invoice_custom" name="Invoice Report"-->
+<!--              parent="account.menu_finance_reports"-->
+<!--              action="report_invoice_custom"/>-->
+</data>

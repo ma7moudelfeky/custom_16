@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+whole_discount_id,whole_discount_name,model_whole_discount,,1,1,1,1
+whole_discount_line_id,whole_discount_line_name,model_whole_discount_line,,1,1,1,1
