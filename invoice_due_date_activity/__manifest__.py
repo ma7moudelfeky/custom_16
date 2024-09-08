@@ -9,6 +9,7 @@
                       .""",
     'depends': ['base', 'account', 'user_notify'],
     'data': [
+        'security/security.xml',
         # 'data/mail_data.xml',
         'data/ir_cron_data.xml',
         # 'views/sale_order_views.xml',
