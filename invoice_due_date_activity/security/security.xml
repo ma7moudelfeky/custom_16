@@ -1,0 +1,7 @@
+<data>
+    <record id="group_activity_for_due_invoices" model="res.groups">
+        <field name="name">Activity For Due Invoices</field>
+        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
+
+</data>
