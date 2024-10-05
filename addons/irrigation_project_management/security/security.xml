@@ -1,0 +1,120 @@
+<data noupdate="0">
+
+    <record id="group_pm" model="res.groups">
+        <field name="name">Pm</field>
+        <field name="implied_ids" eval="[(4, ref('project.group_project_user'))]"/>
+        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
+
+    <record id="group_qs" model="res.groups">
+        <field name="name">QS &amp; Draft</field>
+        <field name="implied_ids" eval="[(4, ref('irrigation_project_management.group_pm'))]"/>
+        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
+
+    <record id="group_team_leader" model="res.groups">
+        <field name="name">Team Leader</field>
+        <field name="implied_ids" eval="[(4, ref('project.group_project_user'))]"/>
+        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
+    
+    <record id="group_designer_qc" model="res.groups">
+        <field name="name">Designer / Qc</field>
+        <field name="implied_ids" eval="[(4, ref('project.group_project_user'))]"/>
+        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
+    
+    <record id="rule_project_project" model="ir.rule">
+        <field name="name">All Project</field>
+        <field name="model_id" ref="project.model_project_project"/>
+        <field name="domain_force">[(1,'=',1)]</field>
+        <field name="groups" eval="[(4, ref('project.group_project_manager')),(4, ref('irrigation_project_management.group_qs'))]"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_create" eval="1"/>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_unlink" eval="1"/>
+    </record>
+
+    <record id="rule_pm_project_project" model="ir.rule">
+        <field name="name">PM Own Project</field>
+        <field name="model_id" ref="project.model_project_project"/>
+        <field name="domain_force">[('user_id','=',user.id)]</field>
+        <field name="groups" eval="[(4, ref('irrigation_project_management.group_pm'))]"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_create" eval="1"/>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_unlink" eval="1"/>
+    </record>
+
+    <record id="rule_qc_project_project" model="ir.rule">
+        <field name="name">QC Own Project</field>
+        <field name="model_id" ref="project.model_project_project"/>
+        <field name="domain_force">[('favorite_user_ids','in',user.id)]</field>
+        <field name="groups" eval="[(4, ref('irrigation_project_management.group_designer_qc'))]"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_create" eval="1"/>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_unlink" eval="1"/>
+    </record>
+
+    <record id="rule_team_project_project" model="ir.rule">
+        <field name="name">Only Team Project</field>
+        <field name="model_id" ref="project.model_project_project"/>
+        <field name="domain_force">[('project_team_lead_id','=',user.id)]</field>
+        <field name="groups" eval="[(4, ref('irrigation_project_management.group_team_leader'))]"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_create" eval="1"/>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_unlink" eval="1"/>
+    </record>
+
+    <record id="rule_project_task" model="ir.rule">
+        <field name="name">All Tasks</field>
+        <field name="model_id" ref="project.model_project_task"/>
+        <field name="domain_force">[(1,'=',1)]</field>
+        <field name="groups" eval="[(4, ref('project.group_project_manager')),(4, ref('irrigation_project_management.group_qs'))]"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_create" eval="1"/>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_unlink" eval="1"/>
+        <!--<field name="global" eval="1"/> -->
+    </record>
+
+    <record id="rule_pm_all_task" model="ir.rule">
+        <field name="name">PM All Tasks</field>
+        <field name="model_id" ref="project.model_project_task"/>
+        <field name="domain_force">[('project_id.user_id','=',user.id)]</field>
+        <field name="groups" eval="[(4, ref('irrigation_project_management.group_pm'))]"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_create" eval="1"/>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_unlink" eval="1"/>
+        <!--<field name="global" eval="1"/> -->
+    </record>
+
+    <record id="rule_all_task" model="ir.rule">
+        <field name="name">Team Lead Tasks</field>
+        <field name="model_id" ref="project.model_project_task"/>
+        <field name="domain_force">[('project_id.project_team_lead_id','=',user.id)]</field>
+        <field name="groups" eval="[(4, ref('irrigation_project_management.group_team_leader'))]"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_create" eval="1"/>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_unlink" eval="1"/>
+        <!--<field name="global" eval="1"/> -->
+    </record>
+
+
+    <record id="rule_only_his_task_task" model="ir.rule">
+        <field name="name">Only Tasks</field>
+        <field name="model_id" ref="project.model_project_task"/>
+        <field name="domain_force">[('project_id.favorite_user_ids','in',user.id)]</field>
+        <field name="groups" eval="[(4, ref('irrigation_project_management.group_designer_qc'))]"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_create" eval="1"/>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_unlink" eval="1"/>
+    </record>
+
+
+</data>

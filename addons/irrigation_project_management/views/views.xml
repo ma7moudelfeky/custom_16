@@ -1,0 +1,269 @@
+<data>
+    <record id="project_type_tree" model="ir.ui.view">
+        <field name="name">project.type.tree</field>
+        <field name="model">project.type</field>
+        <!--<field name="field_parent">children_ids if_want_to_add_Childs</field>-->
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+    
+    <record id="project_type_action" model="ir.actions.act_window">
+        <field name="name">Project Type</field>
+        <field name="res_model">project.type</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="planet_type_tree" model="ir.ui.view">
+        <field name="name">planet.type.tree</field>
+        <field name="model">planet.type</field>
+        <!--<field name="field_parent">children_ids if_want_to_add_Childs</field>-->
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="name"/>
+                <field name="uom_id"/>
+                <field name="lpd"/>
+                <field name="lph"/>
+                <field name="vr"/>
+                <field name="category_ids" widget="many2many_tags" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="planet_type_action" model="ir.actions.act_window">
+        <field name="name">Planet Type</field>
+        <field name="res_model">planet.type</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="task_type_tree" model="ir.ui.view">
+        <field name="name">task.type.tree</field>
+        <field name="model">task.type</field>
+        <!--<field name="field_parent">children_ids if_want_to_add_Childs</field>-->
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="kpi"/>
+                <field name="uom_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="task_type_form" model="ir.ui.view">
+        <field name="name">task.type.form</field>
+        <field name="model">task.type</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                        <group>
+                            <field name="kpi"/>
+                            <field name="uom_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="task_type_checklist_ids" string="Task Type Checklist Ids">
+                            <!-- add  context="{'default_field' : field}" to set default value -->
+                            <field name="task_type_checklist_ids">
+                                <tree editable="bottom">
+                                    <!-- add  domain="[('id','=',parent.field)]" to set default domain -->
+                                    <field name="code"/>
+                                    <field name="name"/>
+                                    <field name="description_ar"/>
+                                    <field name="description_en"/>
+                                    <field name="severity_level"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="task_type_action" model="ir.actions.act_window">
+        <field name="name">Task Type &amp; Checklist</field>
+        <field name="res_model">task.type</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="project_service_tree" model="ir.ui.view">
+        <field name="name">project.service.tree</field>
+        <field name="model">project.service</field>
+        <!--<field name="field_parent">children_ids if_want_to_add_Childs</field>-->
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="project_service_action" model="ir.actions.act_window">
+        <field name="name">Project Service</field>
+        <field name="res_model">project.service</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="boq_item_line_tree" model="ir.ui.view">
+        <field name="name">boq.item.line.tree</field>
+        <field name="model">boq.item.line</field>
+        <!--<field name="field_parent">children_ids if_want_to_add_Childs</field>-->
+        <field name="arch" type="xml">
+            <tree edit="0" create="0" delete="0">
+                <field name="internal_code"/>
+                <field name="category_id"/>
+                <field name="product_id"/>
+                <field name="qty_est"/>
+                <field name="qty_dwg"/>
+                <field name="formula"/>
+                <field name="qty_boq"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="task_type_checklist_tree" model="ir.ui.view">
+        <field name="name">task.type.checklist.tree</field>
+        <field name="model">task.type.checklist</field>
+        <!--<field name="field_parent">children_ids if_want_to_add_Childs</field>-->
+        <field name="arch" type="xml">
+            <tree edit="0" create="0" delete="0">
+                <field name="project_id"/>
+                <field name="task_id"/>
+                <field name="create_uid"/>
+                <field name="write_uid"/>
+                <field name="description_en"/>
+                <field name="qc_comment"/>
+                <field name="repetition"/>
+                <field name="correction"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="task_type_checklist_search" model="ir.ui.view">
+        <field name="name">task.type.checklist.search</field>
+        <field name="model">task.type.checklist</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="project_id"/>
+                <field name="task_id"/>
+                <field name="description_en"/>
+                <field name="qc_comment"/>
+                <group expand="0" string="Group By">
+                    <filter string="Project" name="group_project_id" context="{'group_by':'project_id'}"/>
+                    <filter string="Task" name="group_task_id" context="{'group_by':'task_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+
+    <record id="boq_item_line_action" model="ir.actions.act_window">
+        <field name="name">Boq Items</field>
+        <field name="res_model">boq.item.line</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="task_type_checklist_action" model="ir.actions.act_window">
+        <field name="name">QC Report</field>
+        <field name="res_model">task.type.checklist</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('task_id','!=',False)]</field>
+    </record>
+
+    <record id="task_attachment_tree" model="ir.ui.view">
+        <field name="name">task.attachment.tree</field>
+        <field name="model">task.attachment</field>
+        <!--<field name="field_parent">children_ids if_want_to_add_Childs</field>-->
+        <field name="arch" type="xml">
+            <tree create="0" edit="0" delete="0">
+                <field name="task_id"/>
+                <field name="create_date"/>
+                <field name="create_uid"/>
+                <field name="attachment_ids" widget="many2many_binary"/>
+            </tree>
+        </field>
+    </record>
+
+
+    <menuitem id="boq_item_line_menu"
+              name="Boq Items"
+              action="boq_item_line_action"
+              parent="project.menu_main_pm"
+              sequence="3"/>
+
+
+    <menuitem id="task_type_pre_menu"
+              name="Performance Reports"
+              parent="project.menu_main_pm"
+              sequence="4"/>
+
+
+    <menuitem id="task_type_checklist_menu"
+              name="QC Report"
+              action="task_type_checklist_action"
+              parent="task_type_pre_menu"
+              sequence="1"/>
+
+
+    <menuitem id="task_type_che_menu"
+              name="Performance Report"
+              action="task_quantity_action"
+              parent="task_type_pre_menu"
+              groups="project.group_project_manager"
+              sequence="10"/>
+
+    <menuitem id="project_type_menu"
+              name="Project Type"
+              action="project_type_action"
+              parent="project.menu_project_config"
+              sequence="20"/>
+
+    <menuitem id="planet_type_menu"
+              name="Planet Type"
+              action="planet_type_action"
+              groups="group_pm"
+              parent="project.menu_project_config"
+              sequence="20"/>
+
+    <menuitem id="task_type_menu"
+              name="Task Type &amp; Checklist"
+              action="task_type_action"
+              parent="project.menu_project_config"
+              sequence="30"/>
+
+    <menuitem id="project_service_menu"
+              name="Project Service"
+              action="project_service_action"
+              parent="project.menu_project_config"
+              sequence="40"/>
+    
+    <record id="project.menu_projects_group_stage" model="ir.ui.menu">
+        <field name="groups_id" eval="[(6,0,[ref('irrigation_project_management.group_designer_qc'),ref('irrigation_project_management.group_team_leader'),ref('irrigation_project_management.group_pm'),ref('project.group_project_manager')])]"/>
+    </record>
+    <record id="project.menu_project_config" model="ir.ui.menu">
+        <field name="groups_id" eval="[(6,0,[ref('irrigation_project_management.group_team_leader'),ref('irrigation_project_management.group_pm'),ref('project.group_project_manager')])]"/>
+    </record>
+
+    <record id="project.menu_projects_config" model="ir.ui.menu">
+        <field name="groups_id" eval="[(6,0,[ref('irrigation_project_management.group_designer_qc'),ref('irrigation_project_management.group_team_leader'),ref('irrigation_project_management.group_pm'),ref('project.group_project_manager')])]"/>
+    </record>
+
+    <record id="project.menu_projects_config_group_stage" model="ir.ui.menu">
+        <field name="groups_id" eval="[(6,0,[ref('irrigation_project_management.group_pm'),ref('project.group_project_manager')])]"/>
+    </record>
+
+    <record id="project.menu_projects" model="ir.ui.menu">
+        <field name="groups_id" eval="[(6,0,[ref('irrigation_project_management.group_designer_qc'),ref('irrigation_project_management.group_team_leader'),ref('irrigation_project_management.group_pm'),ref('project.group_project_manager')])]"/>
+    </record>
+
+    <record id="contacts.menu_contacts" model="ir.ui.menu">
+        <field name="groups_id" eval="[(6,0,[ref('irrigation_project_management.group_pm'),ref('project.group_project_manager')])]"/>
+    </record>
+
+</data>

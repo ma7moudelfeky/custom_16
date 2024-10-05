@@ -1,0 +1,51 @@
+<data>
+    <record id="task_quantity_tree" model="ir.ui.view">
+        <field name="name">task.quantity.tree</field>
+        <field name="model">task.quantity</field>
+        <!--<field name="field_parent">children_ids if_want_to_add_Childs</field>-->
+        <field name="arch" type="xml">
+            <tree create="0" edit="0" delete="0" decoration-success="rate &gt;= 100" decoration-warning="rate &gt;= 90 and rate &lt; 100" decoration-danger="rate &lt; 90">
+                <field name="project_id"/>
+                <field name="project_task_id"/>
+                <field name="date_deadline"/>
+                <field name="create_uid" string="Assignee"/>
+                <field name="uom_id"/>
+                <field name="kpi"/>
+                <field name="qty" string="AC Qty" sum="Total"/>
+                <field name="hour_required" widget="float_time" sum="Total"/>
+                <field name="hour_spent" widget="float_time" sum="Total"/>
+                <field name="rate" widget="percent"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="task_quantity_search" model="ir.ui.view">
+        <field name="name">task.quantity.search</field>
+        <field name="model">task.quantity</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="project_id"/>
+                <field name="project_task_id"/>
+                <field name="create_uid"/>
+                <filter string="Rate 100 %" name="filter_rate_100" domain="[('rate','&gt;=',100)]"/>
+                <filter string="Rate Lower 100 %" name="filter_rate___100" domain="[('rate','&lt;',100)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Project" name="group_project_id" context="{'group_by':'project_id'}"/>
+                    <filter string="Task" name="group_project_task_id" context="{'group_by':'project_task_id'}"/>
+                    <filter string="Assignee" name="group_create_uid" context="{'group_by':'create_uid'}"/>
+                    <filter string="Project Status" name="project_state" context="{'group_by':'project_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+
+    <record id="task_quantity_action" model="ir.actions.act_window">
+        <field name="name">Performance</field>
+        <field name="res_model">task.quantity</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="task_quantity_tree"/>
+        <field name="domain">[('project_task_id','!=',False)]</field>
+    </record>
+
+</data>

@@ -1,0 +1,133 @@
+<data>
+    <record id="inherit_project_task_form" model="ir.ui.view">
+        <field name="name">inherit.project.task.form</field>
+        <field name="model">project.task</field>
+        <!--<field name="groups_id" eval="[(4, ref(''))]"/>-->
+        <field name="inherit_id" ref="project.view_task_form2"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='project_id']" position="after">
+                <field name="can_edit_project" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="customer_code" groups="irrigation_project_management.group_pm"/>
+            </xpath>
+
+            <xpath expr="//h1[@class='d-flex justify-content-between align-items-center']" position="before">
+                <field name="task_type_id" force_save="1" attrs="{'readonly':[('name_done','=',False)]}"/>
+                <field name="name_done" invisible="1"/>
+                <field name="edit_assignee" invisible="1"/>
+            </xpath>
+
+            <xpath expr="//field[@name='user_ids']" position="attributes">
+                <attribute name="attrs">{'readonly':[('edit_assignee','=',False)]}</attribute>
+                <attribute name="force_save">1</attribute>
+            </xpath>
+
+
+            <xpath expr="//field[@name='tag_ids']" position="after">
+                <field name="quantity"/>
+                <field name="estimated_time"/>
+            </xpath>
+            <xpath expr="//field[@name='name']" position="attributes">
+                <attribute name="readonly">1</attribute>
+                <attribute name="force_save">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='project_id']" position="attributes">
+                <attribute name="options">{'no_create': True, 'no_edit': True, 'no_open': True}</attribute>
+                <attribute name="attrs">{'readonly':[('can_edit_project','=',False)]}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='partner_id']" position="attributes">
+                <attribute name="options">{'no_create': True, 'no_edit': True, 'no_open': True}</attribute>
+                <attribute name="attrs">{'invisible':[('can_edit_project','=',False)]}</attribute>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page name="quantity" string="Quantity">
+                    <!-- add  context="{'default_field' : field}" to set default value -->
+                    <field name="task_quantity_ids">
+                        <tree editable="bottom">
+                            <!-- add  domain="[('id','=',parent.field)]" to set default domain -->
+                            <field name="create_date"/>
+                            <field name="create_uid"/>
+                            <field name="uom_id"/>
+                            <field name="kpi"/>
+                            <field name="qty"/>
+                        </tree>
+                    </field>
+                </page>
+                <page name="task_type_checklist_ids" string="Task Type Checklist">
+                    <!-- add  context="{'default_field' : field}" to set default value -->
+                    <field name="task_type_checklist_ids">
+                        <tree editable="bottom">
+                            <!-- add  domain="[('id','=',parent.field)]" to set default domain -->
+                            <field name="code"/>
+                            <field name="name"/>
+                            <field name="description_en"/>
+                            <field name="qc_comment"/>
+                            <field name="repetition"/>
+                            <field name="correction"/>
+                            <field name="is_task" invisible="1"/>
+                        </tree>
+                    </field>
+                </page>
+                <page name="task_attachment_ids" string="Task Attachment Ids">
+                    <!-- add  context="{'default_field' : field}" to set default value -->
+                    <field name="task_attachment_ids">
+                        <tree editable="bottom">
+                            <!-- add  domain="[('id','=',parent.field)]" to set default domain -->
+                            <field name="create_date"/>
+                            <field name="create_uid"/>
+                            <field name="attachment_ids" widget="many2many_binary"/>
+                        </tree>
+                    </field>
+                </page>
+                
+            </xpath>
+
+        </field>
+    </record>
+    
+    
+    <record id="inherit_project_task_tree" model="ir.ui.view">
+        <field name="name">inherit.project.task.tree</field>
+        <field name="model">project.task</field>
+        <!--<field name="groups_id" eval="[(4, ref(''))]"/>-->
+        <field name="inherit_id" ref="project.view_task_tree2"/>
+        <field name="arch" type="xml">
+            <field name="tag_ids" position="after">
+                <field name="customer_code" optional="show" groups="irrigation_project_management.group_pm"/>
+                <field name="quantity" optional="show"/>
+            </field>
+        </field>
+    </record>
+    
+    <record id="inherit_project_force_task_form" model="ir.ui.view">
+        <field name="name">inherit.project.task.form</field>
+        <field name="model">project.task</field>
+        <!--<field name="groups_id" eval="[(4, ref(''))]"/>-->
+        <field name="inherit_id" ref="project.quick_create_task_form"/>
+        <field name="arch" type="xml">
+            <field name="name" position="before">
+                <field name="task_type_id" force_save="1" attrs="{'readonly':[('name_done','=',False)]}"/>
+                <field name="name_done" invisible="1"/>
+                <field name="task_type_checklist_ids" widget="many2many_tags" invisible="1"/>
+            </field>
+            <xpath expr="//field[@name='name']" position="attributes">
+                <attribute name="readonly">1</attribute>
+                <attribute name="force_save">1</attribute>
+            </xpath>
+        </field>
+    </record>   
+    
+    <record id="inherit_project_task_type_form" model="ir.ui.view">
+        <field name="name">inherit.project.task.type.form</field>
+        <field name="model">project.task.type</field>
+        <!--<field name="groups_id" eval="[(4, ref(''))]"/>-->
+        <field name="inherit_id" ref="project.task_type_edit"/>
+        <field name="arch" type="xml">
+            <field name="project_ids" position="after">
+                <field name="not_readonly_task_type"/>
+                <field name="is_done"/>
+            </field>
+        </field>
+    </record>
+</data>
