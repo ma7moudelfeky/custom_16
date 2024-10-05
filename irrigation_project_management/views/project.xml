@@ -1,0 +1,208 @@
+<data>
+    <record id="inherit_project_project_form" model="ir.ui.view">
+        <field name="name">inherit.project.project.form</field>
+        <field name="model">project.project</field>
+        <!--<field name="groups_id" eval="[(4, ref(''))]"/>-->
+        <field name="inherit_id" ref="project.edit_project"/>
+        <field name="arch" type="xml">
+            <field name="user_id" position="after">
+                <field name="project_team_lead_id"/>
+                <field name="apply_qc"/>
+                <field name="maximum_daily_working_hours" invisible="1"/>
+            </field>
+            <xpath expr="//field[@name='partner_id']" position="before">
+                <field name="project_type_id"/>
+                <field name="project_code" readonly="1"/>
+                <field name="done_tasks" readonly="1"/>
+            </xpath>
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="favorite_user_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+            </xpath>
+            <xpath expr="//div[@name='dates']" position="after">
+                <field name="raincad_database"/>
+                <field name="project_source_file_ids" widget="many2many_binary" groups="irrigation_project_management.group_pm"/>
+                <field name="project_package_layout_ids" widget="many2many_binary" groups="irrigation_project_management.group_pm"/>
+                <button type="object" name="action_task_attachment"
+                        groups="irrigation_project_management.group_pm"
+                        class="oe_stat_button" icon="fa-pencil-square-o"
+                >View Tasks Attachments
+                </button>
+            </xpath>
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="customer_code" groups="irrigation_project_management.group_pm"/>
+                <field name="project_service_ids" widget="many2many_tags"/>
+                <field name="received_date"/>
+<!--                <field name="estimate_time" widget="float_time"/>-->
+                <field name="spent_time" widget="float_time"/>
+                <field name="can_edit_project" invisible="1"/>
+                <field name="man_days"/>
+                <field name="total_estimated_valve"/>
+                <field name="total_actual_valve"/>
+                <field name="total_estimated_design" widget="float_time"/>
+                <field name="project_daily_water"/>
+                <field name="project_pump_flow"/>
+            </xpath>
+
+            <xpath expr="//field[@name='partner_id']" position="attributes">
+                <attribute name="attrs">{'invisible':[('can_edit_project','=',False)]}</attribute>
+                <attribute name="options">{'no_create': True, 'no_edit': True, 'no_open': True}</attribute>
+            </xpath>
+
+            <xpath expr="//form[1]/sheet[1]/group[1]/group[2]/field[@name='project_package_layout_ids']" position="after">
+                <xpath expr="//field[@name='tag_ids']" position="move"/>
+            </xpath>
+
+            <xpath expr="//notebook//page[@name='description']" position="after">
+                <page name="Soft Scape Data" string="Soft Scape Data">
+<!--                    <group>-->
+<!--                        <group>-->
+<!--                            <field name="grass_area"/>-->
+<!--                            <field name="palm"/>-->
+<!--                            <field name="tree"/>-->
+<!--                            <field name="palm_like"/>-->
+<!--                        </group>-->
+<!--                        <group>-->
+<!--                            <field name="ground_cover"/>-->
+<!--                            <field name="shrubs_separated"/>-->
+<!--                            <field name="shrubs_heavy"/>-->
+<!--                        </group>-->
+<!--                    </group>-->
+                    <!-- add  context="{'default_field' : field}" to set default value -->
+                    <group>
+                        <group>
+                            <button name="send_to_boq_items" string="Send To BOQ Items" type="object" class="oe_highlight"/>
+                            <field name="soft_scape_read" invisible="1"/>
+                        </group>
+                        <group>
+
+                        </group>
+                    </group>
+
+                    <field name="soft_scape_data_ids" attrs="{'readonly':[('soft_scape_read','=',False)]}">
+                        <tree editable="bottom">
+                            <!-- add  domain="[('id','=',parent.field)]" to set default domain -->
+                            <field name="planet_type_id"/>
+                            <field name="uom_id"/>
+                            <field name="lpd" readonly="0"/>
+                            <field name="lph" readonly="0"/>
+                            <field name="vr" readonly="0"/>
+                            <field name="category_ids"  widget="many2many_tags"/>
+                            <field name="brand_id"/>
+                            <field name="qty"/>
+                            <field name="device_no"/>
+                            <field name="es_qty"/>
+                            <field name="wr" sum="Total"/>
+                            <field name="evf" sum="Total"/>
+                            <field name="evn" sum="Total"/>
+                            <field name="attachment_ids" widget="many2many_binary"/>
+                        </tree>
+                    </field>
+                </page>
+
+<!--                <page name="Main tab Fields " string="Main Tab Fields">-->
+<!--                    <group>-->
+<!--                        <group>-->
+<!--                            <field name="man_days"/>-->
+<!--                            <field name="total_estimated_valve"/>-->
+<!--                            <field name="total_estimated_design"/>-->
+<!--                            <field name="project_daily_water"/>-->
+<!--                            <field name="project_pump_flow"/>-->
+<!--                        </group>-->
+<!--                        <group>-->
+
+<!--                        </group>-->
+<!--                    </group>-->
+
+<!--                </page>-->
+
+
+                <page name="boq_item_line_ids" string="Boq Item">
+                    <!-- add  context="{'default_field' : field}" to set default value -->
+
+                    <group>
+                        <group>
+                            <field name="category_id"/>
+                            <button name="add_products" string="Add Products" type="object" class="oe_highlight"/>
+                        </group>
+                        <group>
+
+                        </group>
+                    </group>
+
+
+                    <field name="boq_item_line_ids">
+                        <tree editable="bottom">
+                            <!-- add  domain="[('id','=',parent.field)]" to set default domain -->
+                            <field name="planet_type_id"/>
+                            <field name="internal_code"/>
+                            <field name="category_id"/>
+                            <field name="product_id"/>
+                            <field name="qty_est"/>
+                            <field name="qty_dwg"/>
+                            <field name="awq"/>
+                            <field name="qty_boq"/>
+                        </tree>
+                    </field>
+                </page>
+
+
+                <page name="Project Files" string="Project Files" invisible="1">
+                    <group>
+                        <group>
+                            <field name="project_source_file_ids" widget="many2many_binary" groups="irrigation_project_management.group_pm"/>
+                            <field name="grass_layout_ids" widget="many2many_binary"/>
+                            <field name="palm_and_tree_layout_ids" widget="many2many_binary"/>
+                        </group>
+                        <group>
+                            <field name="g_and_s_layout_ids" widget="many2many_binary"/>
+                            <field name="project_package_layout_ids" widget="many2many_binary" groups="irrigation_project_management.group_pm"/>
+                            <field name="project_frame" widget="many2many_binary" groups="irrigation_project_management.group_pm"/>
+                            <button type="object" name="action_task_attachment"
+                                    groups="irrigation_project_management.group_pm"
+                                    class="oe_stat_button" icon="fa-pencil-square-o"
+                            >View Tasks Attachments
+                            </button>
+                        </group>
+                    </group>
+
+                </page>
+            </xpath>
+
+        </field>
+    </record>
+
+<!--    <record id="inherit_project__project_tree" model="ir.ui.view">-->
+<!--        <field name="name">inherit.project.project.tree</field>-->
+<!--        <field name="model">project.project</field>-->
+<!--        <field name="inherit_id" ref="project.view_project"/>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <field name="tag_ids" position="after">-->
+<!--                <field name="project_team_lead_id" optional="show"/>-->
+<!--                <field name="apply_qc" optional="show"/>-->
+<!--                <field name="maximum_daily_working_hours" optional="show"/>-->
+<!--                <field name="project_type_id" optional="show"/>-->
+<!--                <field name="project_code" optional="show"/>-->
+<!--                <field name="customer_code" groups="irrigation_project_management.group_pm" optional="show"/>-->
+<!--                <field name="received_date" optional="show"/>-->
+<!--                <field name="spent_time" widget="float_time" optional="show"/>-->
+<!--                <field name="total_estimated_valve" optional="show"/>-->
+<!--                <field name="total_actual_valve" optional="show"/>-->
+<!--                <field name="total_estimated_design" widget="float_time" ptional="show"/>-->
+<!--                <field name="grass" optional="show"/>-->
+<!--                <field name="ground_covers_low" optional="show"/>-->
+<!--                <field name="ground_covers_medium" optional="show"/>-->
+<!--                <field name="ground_covers_high" optional="show"/>-->
+<!--                <field name="shrubs_heavy_1" optional="show"/>-->
+<!--                <field name="shrubs_separated_1" optional="show"/>-->
+<!--                <field name="trees_low" optional="show"/>-->
+<!--                <field name="trees_medium" optional="show"/>-->
+<!--                <field name="trees_high" optional="show"/>-->
+<!--                <field name="palms" optional="show"/>-->
+<!--                <field name="palms_like" optional="show"/>-->
+<!--                <field name="mainline_pipe" optional="show"/>-->
+<!--                <field name="laterals_pipe" optional="show"/>-->
+<!--            </field>-->
+<!--        </field>-->
+<!--    </record>-->
+
+</data>

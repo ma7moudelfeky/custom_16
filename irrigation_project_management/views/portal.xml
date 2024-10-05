@@ -1,0 +1,95 @@
+<data>
+    <template id="portal_my_projects" inherit_id="project.portal_my_projects">
+        <xpath expr="//t[@t-if='projects']" position="replace">
+            <t t-if="projects" t-call="portal.portal_table">
+                <thead width="100%">
+                    <t t-set="group_by_in_header_list" t-value="['stage_id', 'name']"/>
+                    <th  width="35%">
+                        Name
+                    </th>
+                    <th class="text-center" width="10%">
+                        Received Date
+                    </th>
+                    <th class="text-center" width="15%">
+                        Expected Start Date
+                    </th>
+                    <th class="text-center" width="15%">
+                        Expected End Date
+                    </th>
+                    <th class="text-center" width="10%">
+                        Stage
+                    </th>
+                    <th class="text-center" width="15%">
+                        Completion
+                    </th>
+                </thead>
+                <tbody>
+                    <tr t-foreach="projects" t-as="project">
+                        <td >
+                            <a t-attf-href="/my/projects/#{project.id}?{{ keep_query() }}"><span t-field="project.name"/></a>
+                        </td>
+                        <td class="text-center">
+                            <t t-out="project.received_date"/>
+                        </td>
+                        <td class="text-center">
+                            <t t-out="project.date_start"/>
+                        </td>
+                        <td class="text-center">
+                            <t t-out="project.date"/>
+                        </td>
+                        <td class="text-center">
+                            <t t-out="project.stage_id.name"/>
+                        </td>
+                        <td class="text-center">
+                            <span>Done</span>
+                            <t t-out="project.done_tasks"/>
+                            <span>OF</span>
+                            <t t-out="project.task_count_with_subtasks"/>
+                            <t t-out="project.label_tasks"/>
+                        </td>
+                    </tr>
+                </tbody>
+            </t>
+<!--            <div class="mt32" id="task_chat" data-anchor="true">-->
+<!--                <h4><strong>Message and communication history</strong></h4>-->
+<!--                <t t-call="portal.message_thread">-->
+<!--                    <t t-set="token" t-value="task.access_token"/>-->
+<!--                </t>-->
+<!--            </div>-->
+        </xpath>
+    </template>
+
+    <template id="portal_tasks_list" inherit_id="project.portal_tasks_list">
+        <xpath expr="//thead/tr/th[3]" position="replace"/>
+        <xpath expr="//thead/tr/th[5]" position="replace">
+            <th>Task Deadline</th>
+        </xpath>
+        <xpath expr="//tbody/t/tr/td[3]" position="replace">
+            <td>
+                <span t-field="task.name"/>
+            </td>
+<!--            mdvsfmlsdmflsdl-->
+        </xpath>
+        <xpath expr="//tbody/t/tr/td[4]" position="replace"/>
+        <xpath expr="//tbody/t/tr/td[5]" position="replace">
+            <td >
+                <span t-esc="task.date_deadline"/>
+            </td>
+        </xpath>
+    </template>
+
+
+    <template id="portal_tasks_list_inherit" inherit_id="hr_timesheet.portal_tasks_list_inherit">
+        <xpath expr="//thead/tr/th[6]" position="replace"/>
+        <xpath expr="//thead/tr/th[5]" position="replace">
+<!--            <th>Task Deadline</th>-->
+        </xpath>
+        <xpath expr="//tbody/t/tr/td[6]" position="replace"/>
+        <xpath expr="//tbody/t/tr/td[5]" position="replace">
+<!--            <td >-->
+<!--                <span t-esc="task.date_deadline"/>-->
+<!--            </td>-->
+        </xpath>
+    </template>
+
+</data>
