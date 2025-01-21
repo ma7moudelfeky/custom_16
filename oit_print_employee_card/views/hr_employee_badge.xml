@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_employee_print_badge" model="ir.actions.report">
+        <field name="name">Print Card</field>
+        <field name="model">hr.employee</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">oit_print_employee_card.print_employee_badge</field>
+        <field name="report_file">oit_print_employee_card.print_employee_badge</field>
+        <field name="print_report_name">'Print Card - %s' % (object.name).replace('/', '')</field>
+        <field name="binding_model_id" ref="hr.model_hr_employee"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="print_employee_badge">
+        <t t-call="web.basic_layout">
+            <div class="page">
+                <t t-foreach="docs" t-as="employee">
+<!--                    <div class="col-md-6">-->
+                        <table style="height:280pt; width:153pt; border: 1pt solid black; border-collapse:separate; border-radius:8pt; margin:5pt">
+                            <tr>
+                                <td valign="center">
+                                    <table style="width:80pt; height:120pt" class="table-borderless">
+                                        <tr style="height:30%">
+                                            <td align="right">
+                                                    <img t-if="employee.company_id.logo" t-att-src="image_data_uri(employee.company_id.logo)" style="margin-top:5px;margin-left:65px;max-height:45pt;max-width:90%" alt="Company Logo"/>
+                                            </td>
+                                        </tr>
+                                        <tr style="height:70%;">
+                                            <td class="text-center">
+                                                <div align="center" >
+                                                    <img t-att-src="image_data_uri(employee.avatar_1920)" style="border-style:solid; border-color:#257180;border-collapse:separate; border-radius:8pt;margin-top:10px;margin-left:65px;max-height:85pt;max-width:90%" alt="Employee Image"/>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td  valign="center">
+                                    <table style="margin-top:-25pt;width:155pt;margin-left:8px; height:150pt" class="table-borderless">
+                                        <tr><th><div style="font-size:15pt;font-color:#257180" align="center"><t t-esc="employee.name"/></div></th></tr>
+                                        <tr><td><div align="center" style="font-size:10pt;margin-bottom:5pt;"><t t-esc="employee.job_id.name"/></div></td></tr>
+<!--                                        <hr/>-->
+                                        <tr><th><div style="font-size:12pt;" align="center">Pin: <t t-esc="employee.pin"/></div></th></tr>
+                                        <tr><th><div style="font-size:12pt;" align="center">ID: <t t-esc="employee.barcode"/></div></th></tr>
+                                        <tr><td><div t-if="employee.barcode" t-field="employee.barcode" t-options="{'widget': 'barcode', 'width': 600, 'height': 120, 'img_style': 'max-height:50pt;max-width:100%;', 'img_align': 'center'}"/></td></tr>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                    </table>
+                                </td>
+                            </tr>
+
+                        </table>
+<!--                    </div>-->
+                </t>
+            </div>
+        </t>
+    </template>
+</odoo>

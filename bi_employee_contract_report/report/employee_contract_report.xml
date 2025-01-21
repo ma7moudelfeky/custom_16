@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<!--  Employee Contract Report PaperFormat -->
+	<record id="employee_contract_report_paperformat" model="report.paperformat">
+		<field name="name">Employee Contract Report</field>
+		<field name="default" eval="True"/>
+		<field name="format">Letter</field>
+		<field name="orientation">Portrait</field>
+		<field name="margin_top">15</field>
+		<field name="margin_bottom">15</field>
+		<field name="margin_left">10</field>
+		<field name="margin_right">10</field>
+		<field name="header_line" eval="False"/>
+		<field name="header_spacing">40</field>
+		<field name="dpi">90</field>
+	</record>
+
+
+	<!--  Employee Contract Report -->
+	<report
+		id="employee_contract_report_action"
+		string="Employee Contract"
+		model="hr.contract"
+		report_type="qweb-pdf"
+		print_report_name = "object.name"
+		name="bi_employee_contract_report.employee_contract_report_template"
+		file="bi_employee_contract_report.employee_contract_report_template"
+		paperformat="bi_employee_contract_report.employee_contract_report_paperformat"
+		menu="True"
+		/>
+
+	<report
+		id="employee_contract_report_action1"
+		string="Employee Contract"
+		model="hr.contract"
+		report_type="qweb-pdf"
+		print_report_name = "object.name"
+		name="bi_employee_contract_report.employee_contract_report_template1"
+		file="bi_employee_contract_report.employee_contract_report_document1"
+		paperformat="bi_employee_contract_report.employee_contract_report_paperformat"
+		menu="True"
+		/>
+
+</odoo>

@@ -6,17 +6,39 @@ from odoo import _, api, fields, models
 from odoo.exceptions import UserError, ValidationError, Warning
 import math
 
+import ast
+import json
+from pytz import UTC
+from collections import defaultdict
+from datetime import timedelta, datetime, time
+from random import randint
+
+from odoo import api, Command, fields, models, tools, SUPERUSER_ID, _, _lt
+from odoo.addons.rating.models import rating_data
+from odoo.addons.web_editor.controllers.main import handle_history_divergence
+from odoo.exceptions import UserError, ValidationError, AccessError
+from odoo.osv import expression
+from odoo.tools.misc import get_lang
+
+
 class ProjectProject(models.Model):
     """
         Inherit Project Project:
          -
     """
     _inherit = 'project.project'
+    _rec_name = 'code'
 
+    name = fields.Char(required=0, tracking=False)
+    code = fields.Char(
+        'Project Code',
+        tracking=True
+    )
     project_code = fields.Char()
     customer_code = fields.Char(
         related='partner_id.ref',
-        string='Customer Code'
+        string='Customer Code',
+        store=1
     )
     project_type_id = fields.Many2one(
         'project.type'
@@ -166,7 +188,82 @@ class ProjectProject(models.Model):
         'Estimated Pump flow rate (M³/Hr.) ( Run time 8 Hr.)',
         compute='_compute_project_pump_flow'
     )
-    
+
+    def project_update_all_action(self):
+        action = self.env['ir.actions.act_window']._for_xml_id('project.project_update_all_action')
+        action['display_name'] = _("%(name)s's Updates", name=self.code)
+        return action
+
+    def action_view_tasks_analysis(self):
+        """ return the action to see the tasks analysis report of the project """
+        action = self.env['ir.actions.act_window']._for_xml_id('project.action_project_task_user_tree')
+        action['display_name'] = _("%(name)s's Tasks Analysis", name=self.code)
+        action_context = ast.literal_eval(action['context']) if action['context'] else {}
+        action_context['search_default_project_id'] = self.id
+        return dict(action, context=action_context)
+
+    def action_project_task_burndown_chart_report(self):
+        action = self.env['ir.actions.act_window']._for_xml_id('project.action_project_task_burndown_chart_report')
+        action['display_name'] = _("%(name)s's Burndown Chart", name=self.code)
+        return action
+
+    def action_project_timesheets(self):
+        action = self.env['ir.actions.act_window']._for_xml_id('hr_timesheet.act_hr_timesheet_line_by_project')
+        action['display_name'] = _("%(name)s's Timesheets", name=self.code)
+        return action
+
+    def action_view_all_rating(self):
+        """ return the action to see all the rating of the project and activate default filters"""
+        action = self.env['ir.actions.act_window']._for_xml_id('project.rating_rating_action_view_project_rating')
+        action['display_name'] = _("%(name)s's Rating", name=self.code)
+        action_context = ast.literal_eval(action['context']) if action['context'] else {}
+        action_context.update(self._context)
+        action_context['search_default_rating_last_30_days'] = 1
+        action_context.pop('group_by', None)
+        action['domain'] = [('consumed', '=', True), ('parent_res_model', '=', 'project.project'), ('parent_res_id', '=', self.id)]
+        if self.rating_count == 1:
+            action.update({
+                'view_mode': 'form',
+                'views': [(view_id, view_type) for view_id, view_type in action['views'] if view_type == 'form'],
+                'res_id': self.rating_ids[0].id, # [0] since rating_ids might be > then rating_count
+            })
+        return dict(action, context=action_context)
+
+
+    def action_get_list_view(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _("%(name)s's Milestones", name=self.code),
+            'domain': [('project_id', '=', self.id)],
+            'res_model': 'project.milestone',
+            'views': [(self.env.ref('project.project_milestone_view_tree').id, 'tree')],
+            'view_mode': 'tree',
+            'help': _("""
+                <p class="o_view_nocontent_smiling_face">
+                    No milestones found. Let's create one!
+                </p><p>
+                    Track major progress points that must be reached to achieve success.
+                </p>
+            """),
+            'context': {
+                'default_project_id': self.id,
+                **self.env.context
+            }
+        }
+
+    def action_view_tasks(self):
+        action = self.env['ir.actions.act_window'].with_context({'active_id': self.id})._for_xml_id('project.act_project_project_2_project_task_all')
+        action['display_name'] = _("%(name)s", name=self.code)
+        context = action['context'].replace('active_id', str(self.id))
+        context = ast.literal_eval(context)
+        context.update({
+            'create': self.active,
+            'active_test': self.active
+        })
+        action['context'] = context
+        return action
+
     @api.depends('soft_scape_data_ids')
     def _compute_total_estimated_valve(self):
         """ Compute total_estimated_valve value """

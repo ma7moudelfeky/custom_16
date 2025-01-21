@@ -7,7 +7,7 @@
     </record>
 
     <record id="group_qs" model="res.groups">
-        <field name="name">QS &amp; Draft</field>
+        <field name="name">Distribution</field>
         <field name="implied_ids" eval="[(4, ref('irrigation_project_management.group_pm'))]"/>
         <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
     </record>

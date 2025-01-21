@@ -96,7 +96,7 @@ class ProjectTask(models.Model):
     # @api.depends('task_type_id', 'name')
     def _compute_can_edit_project(self):
         """ Compute can_edit_project value """
-        if self.env.user.has_group('project.group_project_manager') or self.env.user.has_group('irrigation_project_management.group_pm'):
+        if self.env.user.has_group('project.group_project_manager'):
             self.can_edit_project = True
         else:
             self.can_edit_project = False

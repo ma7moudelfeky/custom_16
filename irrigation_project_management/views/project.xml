@@ -11,6 +11,7 @@
                 <field name="maximum_daily_working_hours" invisible="1"/>
             </field>
             <xpath expr="//field[@name='partner_id']" position="before">
+                <field name="code"/>
                 <field name="project_type_id"/>
                 <field name="project_code" readonly="1"/>
                 <field name="done_tasks" readonly="1"/>
@@ -46,6 +47,10 @@
             <xpath expr="//field[@name='partner_id']" position="attributes">
                 <attribute name="attrs">{'invisible':[('can_edit_project','=',False)]}</attribute>
                 <attribute name="options">{'no_create': True, 'no_edit': True, 'no_open': True}</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='name']" position="attributes">
+                <attribute name="attrs">{'invisible':[('can_edit_project','=',False)]}</attribute>
             </xpath>
 
             <xpath expr="//form[1]/sheet[1]/group[1]/group[2]/field[@name='project_package_layout_ids']" position="after">
@@ -171,38 +176,83 @@
         </field>
     </record>
 
-<!--    <record id="inherit_project__project_tree" model="ir.ui.view">-->
-<!--        <field name="name">inherit.project.project.tree</field>-->
-<!--        <field name="model">project.project</field>-->
-<!--        <field name="inherit_id" ref="project.view_project"/>-->
-<!--        <field name="arch" type="xml">-->
-<!--            <field name="tag_ids" position="after">-->
-<!--                <field name="project_team_lead_id" optional="show"/>-->
-<!--                <field name="apply_qc" optional="show"/>-->
-<!--                <field name="maximum_daily_working_hours" optional="show"/>-->
-<!--                <field name="project_type_id" optional="show"/>-->
-<!--                <field name="project_code" optional="show"/>-->
-<!--                <field name="customer_code" groups="irrigation_project_management.group_pm" optional="show"/>-->
-<!--                <field name="received_date" optional="show"/>-->
-<!--                <field name="spent_time" widget="float_time" optional="show"/>-->
-<!--                <field name="total_estimated_valve" optional="show"/>-->
-<!--                <field name="total_actual_valve" optional="show"/>-->
-<!--                <field name="total_estimated_design" widget="float_time" ptional="show"/>-->
-<!--                <field name="grass" optional="show"/>-->
-<!--                <field name="ground_covers_low" optional="show"/>-->
-<!--                <field name="ground_covers_medium" optional="show"/>-->
-<!--                <field name="ground_covers_high" optional="show"/>-->
-<!--                <field name="shrubs_heavy_1" optional="show"/>-->
-<!--                <field name="shrubs_separated_1" optional="show"/>-->
-<!--                <field name="trees_low" optional="show"/>-->
-<!--                <field name="trees_medium" optional="show"/>-->
-<!--                <field name="trees_high" optional="show"/>-->
-<!--                <field name="palms" optional="show"/>-->
-<!--                <field name="palms_like" optional="show"/>-->
-<!--                <field name="mainline_pipe" optional="show"/>-->
-<!--                <field name="laterals_pipe" optional="show"/>-->
-<!--            </field>-->
-<!--        </field>-->
-<!--    </record>-->
+    <record id="inherit_project_project_kanban" model="ir.ui.view">
+        <field name="name">inherit.project.project.kanban</field>
+        <field name="model">project.project</field>
+        <!--<field name="groups_id" eval="[(4, ref(''))]"/>-->
+        <field name="inherit_id" ref="project.view_project_kanban"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='display_name']" position="after">
+                <field name="code"/>
+            </xpath>
+
+            <xpath expr="//div[@class='o_primary']" position="replace">
+                <div class="o_primary">
+                    <span class="o_text_overflow" t-att-title="record.code.value"><t t-esc="record.code.value"/></span>
+                    <span class="o_text_overflow text-muted" t-if="record.customer_code.value">
+                        <span class="fa fa-user me-2" aria-label="customer" title="customer"/><t t-esc="record.customer_code.value"/>
+                    </span>
+                    <div t-if="record.date.raw_value or record.date_start.raw_value" class="text-muted o_row">
+                        <span class="fa fa-clock-o me-2" title="Dates"/><field name="date_start"/>
+                        <i t-if="record.date.raw_value and record.date_start.raw_value" class="fa fa-long-arrow-right mx-2 oe_read_only" aria-label="Arrow icon" title="Arrow"/>
+                        <field name="date"/>
+                    </div>
+                    <div t-if="record.alias_name.value and record.alias_domain.value" class="text-muted text-truncate" t-att-title="record.alias_id.value">
+                        <span class="fa fa-envelope-o me-2" aria-label="Domain Alias" title="Domain Alias"/><t t-esc="record.alias_id.value"/>
+                    </div>
+                    <div t-if="record.rating_active.raw_value and record.rating_count.raw_value &gt; 0" class="text-muted" groups="project.group_project_rating">
+                        <b class="me-1">
+                            <span style="font-weight:bold;" class="fa mt4 fa-smile-o text-success" t-if="record.rating_avg.raw_value &gt;= 3.66" title="Average Rating: Satisfied" role="img" aria-label="Happy face"/>
+                            <span style="font-weight:bold;" class="fa mt4 fa-meh-o text-warning" t-elif="record.rating_avg.raw_value &gt;= 2.33" title="Average Rating: Okay" role="img" aria-label="Neutral face"/>
+                            <span style="font-weight:bold;" class="fa mt4 fa-frown-o text-danger" t-else="" title="Average Rating: Dissatisfied" role="img" aria-label="Sad face"/>
+                        </b>
+                        <field name="rating_avg_percentage" widget="percentage"/>
+                    </div>
+                    <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                </div>
+
+            </xpath>
+
+        </field>
+    </record>
+
+    <record id="inherit_project_project_tree" model="ir.ui.view">
+        <field name="name">inherit.project.project.tree</field>
+        <field name="model">project.project</field>
+        <!--<field name="groups_id" eval="[(4, ref(''))]"/>-->
+        <field name="inherit_id" ref="project.view_project"/>
+        <field name="arch" type="xml">
+            <field name="display_name" position="replace">
+                <field name="name" groups="project.group_project_manager"/>
+                <field name="code"/>
+                <field name="can_edit_project" invisible="1"/>
+            </field>
+<!--            <xpath expr="//field[@name='display_name']" position="attributes">-->
+<!--                <attribute name="invisible">1</attribute>-->
+<!--            </xpath>-->
+
+        </field>
+    </record>
+
+    <record id="inherit_project_project_search" model="ir.ui.view">
+        <field name="name">inherit.project.project.search</field>
+        <field name="model">project.project</field>
+        <!--<field name="groups_id" eval="[(4, ref(''))]"/>-->
+        <field name="inherit_id" ref="project.view_project_project_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="before">
+                <field name="code"/>
+            </xpath>
+
+            <xpath expr="//field[@name='partner_id']" position="replace">
+                <field name="customer_code"/>
+            </xpath>
+            <xpath expr="//filter[@name='Partner']" position="replace">
+                <filter string="Project Code" name="group_by__code" context="{'group_by':'code'}"/>
+                <filter string="Customer Code" name="group_by_customer_code" context="{'group_by':'customer_code'}"/>
+            </xpath>
+        </field>
+    </record>
+
 
 </data>

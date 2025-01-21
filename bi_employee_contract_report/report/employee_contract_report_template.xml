@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	
+
+	<!--  Employee Contract Report Document -->
+	<template id="employee_contract_report_document">
+		<t t-call="web.html_container">
+			<t t-set="o" t-value="o.with_context(lang=o.employee_id.user_id.lang)"/>
+		
+			<t t-if="not o and doc">
+				<t t-set="o" t-value="doc"/>
+			</t>
+			<t t-if="o and 'company_id' in o">
+				<t t-set="company" t-value="o.company_id"></t>
+			</t>
+			<t t-if="not o or not 'company_id' in o">
+				<t t-set="company" t-value="res_company"></t>
+			</t>
+
+			<div class="article">
+				<div class="page">
+					<center>
+						<div>
+							<img t-if="company.logo" t-att-src="image_data_uri(company.logo)" alt="Logo" style="max-height: 105px;"/>
+						</div>
+					</center>	
+						<p class='text-center' style="font-size:28px;">
+							<center>
+								<h3>
+									CORPORACION INDUSTRIAL MINUTO DE DIOS<br/>
+									830000440-9<br/>
+								</h3>
+								<!--h5>
+									Entidad Privada de Educación Superior, de utilidad común, sin ánimo de lucro<br/>
+								</h5-->
+						    </center>  
+							<br/>
+							<br/>
+							<center>
+								<h3>
+									HACE CONSTAR<br/>
+								</h3>
+						    </center>
+							<p>
+								Que <span t-field="o.employee_id.name" style="font-weight: bold;"/>, mayor de edad identificado(a) con <span t-field="o.employee_id.doctype"/>
+								número <span t-field="o.employee_id.identification_id"/>, se encuentra vinculado(a) a la CORPORACION
+                                INDUSTRIAL MINUTO DE DIOS mediante contrato laboral a <span t-field="o.contract_type_id"/> desde 
+								<span t-field="o.date_start"/>.
+								<br/>
+								<br/>
+								Para confirmación de la información registrada en la presente certificación, favor
+								comunicarse al 3136304472.
+								<br/>
+								<br/>
+								Se expide en Bogotá D.C., a los <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d')"/> días del mes de <span t-esc="o.print_date()"/> de <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y')"/>.
+								<br/>Cordialmente,<br/>
+							</p>
+							<br/>
+							<br/>
+							<br/>
+							<p style="font-weight: bold;">
+								<div>
+									<img src="bi_employee_contract_report/static/description/img/firma.png" style="max-height: 90px;"/>
+								</div>
+								Janeth López Cuervo <br/>
+								Coordinador Nacional Talento Humano
+							</p>
+						</p>
+						<br/>
+						<br/>
+						<br/>
+					<br/>
+				</div>
+			</div>
+			<!--  Employee Contract Report Custom Footer -->
+			<div class="footer">
+				<div class="text-center" style="border-top: 1px solid black">
+					<center>
+						Calle 81A No. 73A-22 Tel.: (1) 794 5958
+						Bogotá D.C., Colombia https://mdc.org.co/
+					</center>
+				</div>
+			</div>
+		</t>
+	</template>
+
+	<template id="employee_contract_report_template">
+	<t t-call="web.html_container">
+		<t t-foreach="docs" t-as="o">
+			<t t-call="bi_employee_contract_report.employee_contract_report_document" t-lang="o.employee_id.user_id.lang"/>
+			<field name="paperformat_id" ref="paperformat_export_payslip"/>
+		</t>
+	</t>
+	</template>
+
+</odoo>
