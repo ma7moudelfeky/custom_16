@@ -1,0 +1,47 @@
+<data>
+    <record id="inherit_repair_order_form" model="ir.ui.view">
+        <field name="name">inherit.repair.order.form</field>
+        <field name="model">repair.order</field>
+        <!--<field name="groups_id" eval="[(4, ref(''))]"/>-->
+        <field name="inherit_id" ref="repair.view_repair_order_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//button[@name='action_validate']" position="attributes">
+                <attribute name="groups">repair_customize.group_confirm_repair</attribute>
+            </xpath>
+
+            <xpath expr="//button[@name='action_repair_start']" position="attributes">
+                <attribute name="groups">repair_customize.group_start_repair</attribute>
+            </xpath>
+
+            <xpath expr="//button[@name='action_repair_end']" position="attributes">
+                <attribute name="groups">repair_customize.group_end_repair</attribute>
+            </xpath>
+
+            <xpath expr="//button[@name='action_send_mail']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//button[@name='print_repair_order']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+        </field>
+    </record>
+    
+    <record id="inherit_repair_order_search" model="ir.ui.view">
+        <field name="name">inherit.repair.order.search</field>
+        <field name="model">repair.order</field>    
+        <!--<field name="groups_id" eval="[(4, ref(''))]"/>-->
+        <field name="inherit_id" ref="repair.view_repair_order_form_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='quotations']" position="before">
+                <filter string="Start Repair" name="filter_start_repair" domain="[('state','=','confirmed')]"/>
+                <filter string="End Repair" name="filter_end_repair" domain="[('state','=','under_repair')]"/>
+            </xpath>
+
+        </field>
+    </record>
+    
+    
+</data>

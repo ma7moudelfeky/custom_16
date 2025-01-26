@@ -1,0 +1,25 @@
+<data>
+    <record id="category_repair_groups" model="ir.module.category" >
+        <field name="name">Repair Groups</field>
+    </record>
+
+    <record id="group_confirm_repair" model="res.groups">
+        <field name="name">Confirm Repair</field>
+        <field name="category_id" ref="category_repair_groups"/>
+        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
+
+    <record id="group_start_repair" model="res.groups">
+        <field name="name">Start Repair</field>
+        <field name="category_id" ref="category_repair_groups"/>
+        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
+
+    <record id="group_end_repair" model="res.groups">
+        <field name="name">End Repair</field>
+        <field name="category_id" ref="category_repair_groups"/>
+        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
+
+
+</data>
