@@ -26,6 +26,11 @@
                 <attribute name="invisible">1</attribute>
             </xpath>
 
+            <xpath expr="//field[@name='operations']//tree//field[@name='product_id']" position="attributes">
+                <attribute name="options">{'no_open': True, 'no_create': True,'no_edit': True, 'no_quick_create': True}</attribute>
+            </xpath>
+
+
         </field>
     </record>
     
@@ -36,6 +41,7 @@
         <field name="inherit_id" ref="repair.view_repair_order_form_filter"/>
         <field name="arch" type="xml">
             <xpath expr="//filter[@name='quotations']" position="before">
+                <filter string="Quotation" name="filter_draft_repair" domain="[('state','=','draft')]"/>
                 <filter string="Start Repair" name="filter_start_repair" domain="[('state','=','confirmed')]"/>
                 <filter string="End Repair" name="filter_end_repair" domain="[('state','=','under_repair')]"/>
             </xpath>

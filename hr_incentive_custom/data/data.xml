@@ -1,0 +1,13 @@
+<odoo>
+    <data>
+        <record id="hr_salary_rule_incentive_custom" model="hr.salary.rule">
+            <field name="name">Incentive</field>
+            <field name="code">Inc</field>
+            <field name="sequence" eval="40"/>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = employee.get_incentive(employee,payslip)</field>
+            <field name="appears_on_payslip" eval="True"/>
+        </record>
+    </data>
+</odoo>
