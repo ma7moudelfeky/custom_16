@@ -28,10 +28,27 @@ class SaleOrderLine(models.Model):
 
     product_id = fields.Many2one('product.product',
                                  string='Product',
-                                 domain="[('approve_state', '=', 'confirmed'),"
-                                        " ('sale_ok', '=', True), '|', "
-                                        "('company_id', '=', False),"
-                                        "('company_id', '=', company_id)]",
+                                 domain="[('approve_state', '=', 'confirmed'),('sale_ok', '=', True)]",
                                  change_default=True, ondelete='restrict',
                                  check_company=True,
                                  help="product field in sale order line")
+
+
+class PurchaseOrderLine(models.Model):
+    """Sale order line inherited to add the domain to the order line product"""
+    _inherit = 'purchase.order.line'
+
+    product_id = fields.Many2one('product.product',
+                                 domain="[('approve_state', '=', 'confirmed'),('purchase_ok', '=', True)]",)
+
+
+class RepairLine(models.Model):
+    """
+        Inherit Repair Line:
+         -
+    """
+    _inherit = 'repair.line'
+
+    product_id = fields.Many2one('product.product',
+                                 string='Product',
+                                 domain="[('type', 'in', ['product', 'consu']),('approve_state', '=', 'confirmed')]",)
