@@ -30,6 +30,9 @@ class ProductTemplate(models.Model):
                                       ('confirmed', 'Confirmed')],
                                      default='draft', string='State',
                                      help='State to approve')
+    active = fields.Boolean(
+        default=False
+    )
 
     def action_confirm_product_approval(self):
         """Confirm button on the product form page"""
