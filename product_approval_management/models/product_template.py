@@ -26,6 +26,12 @@ class ProductTemplate(models.Model):
     """The module is used to add the approval state in the product form page"""
     _inherit = 'product.template'
 
+    @api.model
+    def default_get(self, fields):
+        res = super(ProductTemplate, self).default_get(fields)
+        res['active'] = False
+        return res
+
     approve_state = fields.Selection([('draft', 'Draft'),
                                       ('confirmed', 'Confirmed')],
                                      default='draft', string='State',
@@ -38,11 +44,13 @@ class ProductTemplate(models.Model):
         """Confirm button on the product form page"""
         for rec in self:
             rec.approve_state = 'confirmed'
+            rec.active = True
 
     def action_reset_product_approval(self):
         """Reset to draft state button on the product form page"""
         for rec in self:
             rec.approve_state = 'draft'
+            rec.active = False
 
     def action_confirm_products(self):
         """Bulk product approval button on the product form page"""
